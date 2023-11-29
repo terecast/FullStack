@@ -24,13 +24,31 @@ const crearTarea = asyncHandler(async (req, res) => {
 
 //PUT
 const modificarTarea = asyncHandler(async (req, res) => {
-    res.status(200).json({ message: `Se modifico la tarea ${req.params.id}` }) 
+
+    const tarea = await Tarea.findById(req.params.id)
+    if(!tarea) {
+        res.status(400)
+        throw new Error ("Tarea no encontrada")
+    }
+
+    const updatedTarea = await Tarea.findByIdAndUpdate(req.params.id, req.body, {new: true})
+    res.status(200).json(updatedTarea) 
 }) //cuando se pone el id en la url es PARAM
 
 //DELETE
 const deleteTarea = asyncHandler(async (req, res) => {
-    res.status(200).json({ message: `Se elimino la tarea ${req.params.id}` }) 
-}) //cuando se pone el id en la url es PARAM
+
+    const tarea = await Tarea.findById(req.params.id)
+    if(!tarea) {
+        res.status(400)
+        throw new Error ("Tarea no encontrada")
+    }
+
+    //await tarea.deleteOne(tarea)
+    const deleteTarea = await Tarea.findByIdAndDelete(req.params.id)
+
+    res.status(200).json({ id: req.params.id}) 
+}) 
 
 module.exports = {
     getTarea,
