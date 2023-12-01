@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
-const asyncHandler = require('express')
+const asyncHandler = require('express-async-handler')
 const User = require('../models/userModel')
 
 
@@ -41,14 +41,11 @@ const registrarUser = asyncHandler(async (req, res) => {
             })
         } else {
             res.status(400)
-            throw new Error("No se pudo gusardar el usuario")
+            throw new Error("No se pudo guardar el usuario")
         }
         
     }
 
-    res.status(201).json({
-        message: "Usuario Registrado"
-    })
 })
 
 //Hacer Login
@@ -73,7 +70,7 @@ const loginUser = asyncHandler(async (req, res) => {
         })
     } else {
         res.status(400)
-        throw new Error ("Credenciales incorrectas")    
+        throw new Error ("Credenciales incorrectas, favor de verificar")    
     }
 
 })
