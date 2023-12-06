@@ -35,7 +35,7 @@ const modificarTarea = asyncHandler(async (req, res) => {
     }
 
     //verificamos que la tarea le pertenece al usuario del token dado
-    if(tarea.user !== req.user._id){
+    if(tarea.user.toString() !== req.user.id){
         res.status(401)
         throw new Error("Acceso no Autorizado")
     } else {
@@ -53,9 +53,16 @@ const deleteTarea = asyncHandler(async (req, res) => {
         res.status(400)
         throw new Error ("Tarea no encontrada")
     }
+     //verificamos que la tarea le pertenece al usuario del token dado
+    if(tarea.user.toString() !== req.user.id){
+        res.status(401)
+        throw new Error("Acceso no Autorizado")
+    } else {
+        await Tarea.deleteOne(tarea)
+        res.status(200).json(updatedTarea) 
+    }
 
     //await tarea.deleteOne(tarea)
-    const deleteTarea = await Tarea.findByIdAndDelete(req.params.id)
 
     res.status(200).json({ id: req.params.id}) 
 }) 
